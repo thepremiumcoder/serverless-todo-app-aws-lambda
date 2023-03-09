@@ -54,7 +54,7 @@ custom:
             - dueDate
           properties:
             name:
-              minLength: 1
+              minLength: 3
               type: string
             dueDate:
               type: string
@@ -67,21 +67,21 @@ custom:
             - done
           properties:
             name:
-              minLength: 1
+              minLength: 3
               type: string
             dueDate:
               type: string
             done:
               type: boolean   
 
-  iam:
-    role:
-      statements:
-        - Effect: Allow
-          Action:
-            - xray:PutTelemetryRecords
-            - xray:PutTraceSegments
-          Resource: "*"
+  # iam:
+  #   role:
+  #     statements:
+  #       - Effect: Allow
+  #         Action:
+  #           - xray:PutTelemetryRecords
+  #           - xray:PutTraceSegments
+  #         Resource: "*"
 
 
 functions:
@@ -127,8 +127,8 @@ functions:
           documentation:
             summary: "Create a new todo item"
             description: "Create a new todo item"
-            requestModels:
-              "application/json": CreateTodoRequest
+            # requestModels:
+            #   "application/json": CreateTodoRequest
           request:
             schemas:
               application/json: ${file(models/create-todo-model.json)}
@@ -158,8 +158,8 @@ functions:
           documentation:
             summary: "Update a todo item"
             description: "Update a todo item"
-            requestModels:
-              "application/json": UpdateTodoRequest
+            # requestModels:
+            #   "application/json": UpdateTodoRequest
           request:
             schemas:
               application/json: ${file(models/update-todo-model.json)}
