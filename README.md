@@ -1,6 +1,6 @@
 # Serverless TODO
 
-This project is to developed and deployed Serverless ToDo Application using AWS Lambda and Serverless framework.
+Developed and deployed Serverless ToDo Application using AWS Lambda and Serverless framework.
 
 This application allows users to create/remove/update/get ToDo items. This applications generate application-level metrics, distributed tracing (using AWS X-ray), uses Auth0 (for Authentication), AWS DynamoDB (Serverless noSQL Database) and logging (using  Winston logger to create JSON formatted log statements).
  
