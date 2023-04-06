@@ -1,6 +1,11 @@
 # Serverless TODO
 
-To implement this project, you need to implement a simple TODO application using AWS Lambda and Serverless framework. Search for all comments starting with the `TODO:` in the code to find the placeholders that you need to implement.
+This project is to developed and deployed Serverless ToDo Application using AWS Lambda and Serverless framework.
+
+This application allows users to create/remove/update/get ToDo items. This applications generate application-level metrics, distributed tracing (using AWS X-ray), uses Auth0 (for Authentication), AWS DynamoDB (Serverless noSQL Database) and logging (using  Winston logger to create JSON formatted log statements).
+ 
+Code of Lambda functions is split into multiple files/classes (The business logic of an application is separated from code for database access, file storage, and code related to AWS Lambda). As part of the security best practices, Instead of defining all permissions under provider/iamRoleStatements, permissions are defined per function in the functions section of the "serverless.yml".
+
 
 # Functionality of the application
 
@@ -8,16 +13,17 @@ This application will allow creating/removing/updating/fetching TODO items. Each
 
 # TODO items
 
-The application should store TODO items, and each TODO item contains the following fields:
+The application stores TODO items, and each TODO item contains the following fields:
 
 * `todoId` (string) - a unique id for an item
+* `userId` (string) - id of a user who created  an item
 * `createdAt` (string) - date and time when an item was created
 * `name` (string) - name of a TODO item (e.g. "Change a light bulb")
 * `dueDate` (string) - date and time by which an item should be completed
 * `done` (boolean) - true if an item was completed, false otherwise
 * `attachmentUrl` (string) (optional) - a URL pointing to an image attached to a TODO item
 
-You might also store an id of a user who created a TODO item.
+
 
 ## Prerequisites
 
@@ -141,7 +147,7 @@ You also need to add any necessary resources to the `resources` section of the `
 
 # Frontend
 
-The `client` folder contains a web application that can use the API that should be developed in the project.
+The `client` folder contains a web application that can use the API.
 
 This frontend should work with your serverless application once it is developed, you don't need to make any changes to the code. The only file that you need to edit is the `config.ts` file in the `client` folder. This file configures your client application just as it was done in the course and contains an API endpoint and Auth0 configuration:
 
@@ -164,9 +170,23 @@ To implement authentication in your application, you would have to create an Aut
 
 To complete this exercise, please follow the best practices from the 6th lesson of this course.
 
-## Logging
 
-The starter code comes with a configured [Winston](https://github.com/winstonjs/winston) logger that creates [JSON formatted](https://stackify.com/what-is-structured-logging-and-why-developers-need-it/) log statements. You can use it to write log messages like this:
+## Validate HTTP requests
+Validate incoming HTTP requests either in Lambda handlers or using request validation in API Gateway. The latter can be done either using the `serverless-reqvalidator-plugin` or by providing `request schemas` in function definitions.
+
+## Metrics 
+This applications generate application-level metrics
+
+## Enable the distributed tracing
+I used AWS X-ray for this purpose. To do this, you will have to:
+- Enable X-ray tracing in the serverless YAML file
+- Instrument code in the handler functions to generate sub-segments. Meaning, wrap all AWS calls with X-ray SDK.
+- Once you deploy and test your API endpoints, you will need to check the Service map in the AWS X-Ray web console. View the traces.
+
+## Logging
+The application must have a sufficient amount of log statements.
+
+The code comes with a configured [Winston](https://github.com/winstonjs/winston) logger that creates [JSON formatted](https://stackify.com/what-is-structured-logging-and-why-developers-need-it/) log statements. You can use it to write log messages like this:
 
 ```ts
 import { createLogger } from '../../utils/logger'
@@ -180,14 +200,6 @@ logger.info('User was authorized', {
 })
 ```
 
-
-# Grading the submission
-
-Once you have finished developing your application, please set `apiId` and Auth0 parameters in the `config.ts` file in the `client` folder. A reviewer would start the React development server to run the frontend that should be configured to interact with your serverless application.
-
-**IMPORTANT**
-
-*Please leave your application running until a submission is reviewed. If implemented correctly it will cost almost nothing when your application is idle.*
 
 # Suggestions
 
@@ -265,7 +277,7 @@ This should start a development server with the React application that will inte
 
 # Postman collection
 
-An alternative way to test your API, you can use the Postman collection that contains sample requests. You can find a Postman collection in this project. To import this collection, do the following.
+An alternative way to test the API, you can use the Postman collection that contains sample requests. You can find a Postman collection in this project. To import this collection, do the following.
 
 Click on the import button:
 
